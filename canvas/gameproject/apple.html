@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div id="start">
+        <div>
+            <h1>강쥐미니게임천국</h1>
+            <p>게임을 시작하시겠습니까?</p>
+            <div class="likebtn" id="gamebtn">YES</div>
+            <div id="select">
+                <div id="maze">강쥐미로</div>
+                <div id="jumpgame">강쥐 삶의체험</div>
+                <div id="crush">강쥐 벽깨기</div>
+                <div id="brain">강쥐 기억력게임</div>
+            </div>
+            <div id="nogame">
+                게임 수리중...<br/>
+                다른 게임을 선택하시겠습니까?<br/>
+                <button onclick="back()">YES</button>
+            </div>
+        </div>
+    </div>
+    <div id="game">
+    <h1>삶의 체험 - 사과농장</h1>
+    <div id="score">
+        <span>🍎수확량:</span>
+        <p onclick="gameStart()">게임시작: click❣</p>
+        <div id="timer">
+            <div></div>
+        </div>
+    </div>
+    <canvas></canvas>
+    <div id="result">
+        <p>일남이가 사과를 개 땄습니다.</p>
+        <div class="likebtn" onclick="restart()">다시하기</div>
+        <!-- <div class="likebtn" onclick="">그만하기</div> -->
+    </div>
+    </div>
+   
+
+    <script>
+        let startPage = document.querySelector('#start');
+        let startBtn = document.querySelector('#gamebtn');
+        let select = document.querySelector('#select');
+        let gameBtn  = document.querySelector('#jumpgame');
+        let timerdiv = document.querySelector('#timer');
+        let timerdiv2 = document.querySelector('#timer div')
+        let timer = 60;
+        let appleq = 0;
+        let score = document.querySelector('#score span');
+        let maze = document.querySelector('#maze');
+        let canvas = document.querySelector('canvas');
+        let ctx = canvas.getContext('2d');
+        canvas.width = 600;
+        canvas.height = 600;
+        let jump = false;
+        let jumptimer=0;
+        let direction;
+        let animation;
+        let dogImg = new Image();
+        dogImg.src = "/img/dog.png";
+
+        let appleaImg = new Image();
+        appleaImg.src = "/img/apple.png";
+
+        let arr = [];
+        let brickCol=25;
+        let brickRow=10;
+
+        console.log(dogImg);
+        let tik;
+
+
+        
+        //시작화면에서 버튼 누르면 게임 선택창 나오기
+        startBtn.addEventListener('click',function(){
+            select.style.display ='flex';
+            startBtn.style.display='none';
+            document.querySelector('#start div p').innerHTML="게임을 선택하세요";
+        })
+
+        //게임선택하면 시작화면 안보이게, 게임화면 보이게 하기
+        gameBtn.addEventListener('click',function(){
+            startPage.style.display='none';
+            document.querySelector('#game').style.display="block";
+        })
+        
+        //안되는 게임 누르면 안된다는 창 띄우기
+        maze.addEventListener('click', function(){
+            document.querySelector('#nogame').style.display='block';
+        })
+
+        //게임선택 화면으로 돌아가기
+        function back(){
+            document.querySelector('#nogame').style.display='none';
+        }
+
+
+
+        //게임 시작하면 일남이 그리고, 키이벤트 활성화& 타이머바 활성화
+        function gameStart(){
+            ilnam.draw();
+            window.addEventListener('keydown',function(e){
+                direction = e.code;
+                //방향키 좌우/스페이스키로만 일남이 움직이는 함수 실행
+                if(direction=='ArrowRight'||direction=='ArrowLeft'||direction=='Space'){
+                moveIlnam();}
+            })
+            arr.forEach(blk=>blk.draw());
+            document.querySelector('#score p').innerHTML="남은 시간"
+            tik = setInterval(()=>{
+                timer--;
+                timerdiv2.style.width = (timer*2) + "px";
+                if(timer===45){
+                    document.querySelector('#game').style.backgroundImage = 'linear-gradient(-225deg, #20E2D7 0%, #F9FEA5 100%)';}
+                if(timer===30){
+                    document.querySelector('#game').style.backgroundImage = 'linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%)';}
+                if(timer===15){
+                    document.querySelector('#game').style.backgroundImage = 'linear-gradient(to top, #48c6ef 0%, #6f86d6 100%)';}
+                if(timer===1){
+                    document.querySelector('#game').style.backgroundImage = 'linear-gradient(to top, #1e3c72 0%, #1e3c72 1%, #2a5298 100%)'}
+                if(timer<=0){ gameend();}
+            },1000);
+        }
+
+
+        //게임 종료 함수
+        function gameend(){
+                document.querySelector('#result').style.display="flex";
+                document.querySelector('#result p').innerHTML=`일남이가 ${appleq}개의 사과를 수확했습니다.`;
+                clearInterval(tik);
+        }
+
+
+        //일남이 만들기
+        let ilnam = {
+            x: 50,
+            y: 550,
+            width:50,
+            height:50,
+            draw(){
+                ctx.drawImage(dogImg,this.x,this.y,this.width,this.height);
+            }
+        }
+
+        //일남이 움직이는 함수
+        function moveIlnam(){
+            ctx.clearRect(ilnam.x,ilnam.y,ilnam.width,ilnam.height);
+            if(timer<=0) return;
+            console.log(`시간은${timer}`);
+            if(direction==='ArrowRight'){
+                if(ilnam.x+ilnam.width===600){
+                    ilnam.draw();
+                }else{
+                ilnam.x+=ilnam.width;
+                ilnam.draw();}
+            }else if(direction==='ArrowLeft'){
+                if(ilnam.x+ilnam.width===0+ilnam.width){
+                    ilnam.draw();
+                }else{
+                ilnam.x-=ilnam.width;
+                ilnam.draw();}
+            }else{
+                if(direction==='Space'){
+                    jump=true;
+                    jumpIlnam();
+                    }
+                }
+            }
+
+        //일남이 점프하는 함수
+        //스페이스키를 눌렀을때 y값이 증가.
+        //y값이 0이 되면 다시 바닥으로 내려감.
+        //또는 사과에 닿으면 바닥으로 내려감.
+        function jumpIlnam(){
+            animation = requestAnimationFrame(jumpIlnam);
+            ctx.clearRect(ilnam.x,ilnam.y,ilnam.width,ilnam.height);
+            arr.forEach((apple,index,arr)=>{
+                crushCheck(ilnam,apple);
+            })
+            
+            if(jump){
+                ilnam.y--;
+                jumptimer++;
+                console.log(jumptimer);
+            }
+            else{
+                if(ilnam.y<550) ilnam.y++; jumptimer=0;
+            }
+            
+            //일남이가 사과를 따면 다시 내려오기
+            if(jumptimer > 510){
+                jump=false;
+                jumptimer=0;
+            }
+            ilnam.draw();
+            
+        }
+        
+
+        //블럭 설정
+
+        class Blocks{
+            constructor(){
+                this.x = Math.floor(Math.random()*10)*50;
+                this.y = Math.floor(Math.random()*10)*50;
+                this.width = 50;
+                this.height = 50;
+                this.isCrush = false;
+            }
+            draw(){
+                // appleaImg.addEventListener('load',()=>{
+                    ctx.drawImage(appleaImg,this.x,this.y,this.width,this.height);
+                    ctx.clearRect(0,0,150,150);
+                    ctx.clearRect(450,0,150,100);
+                    ctx.clearRect(0,150,100,50);  
+                // })
+            }
+        }
+
+        //여기서부터 블럭만들기....😭
+        function MakeMaze(){
+            for(let i=1;i<60;i++){
+            let block = new Blocks;
+            //좌표가 중복되지 않는 사과만 배열에 넣기~!
+            let sameblock = arr.findIndex(blk=>blk.x===block.x&&blk.y===block.y)
+            if(sameblock=-1){
+            arr.push(block);
+            console.log('중복된 좌표가 없습니다.')
+            }else{i--;}
+        }}
+        MakeMaze();
+
+
+        //충돌이벤트
+        function crushCheck(user,item){
+            if(user.x===item.x&&user.y===item.y){
+                item.isCrush=true;
+                appleq++;
+                console.log(`🍎일남이가 사과를 ${appleq}개 땄습니다🍎`);
+                score.innerHTML=`🍎수확량: ${appleq}`;
+                jump=false;
+                user.y++;
+                jumptimer=0;
+                //부딪힌 사과는 배열에서 삭제해주기🔥
+                arr.splice(arr.findIndex((apple)=>apple.isCrush===true),1);
+                if(ilnam.y===550){
+                cancelAnimationFrame(animation)  }
+            }
+            
+        }
+
+        // 재시작 다 초기화 시키기~~~
+        function restart(){
+                document.querySelector('#result').style.display="none";
+                document.querySelector('#game').style.backgroundImage = 'linear-gradient(-225deg, #20E2D7 0%, #F9FEA5 100%)';
+                timer=60;
+                appleq=0;
+                score.innerHTML=`🍎수확량: ${appleq}`;
+                cancelAnimationFrame(animation);
+                ctx.clearRect(0,0,500,500);
+                arr=[];
+                console.log(arr);
+                MakeMaze();
+                console.log(arr);
+                arr.forEach(blk=>blk.draw());
+                jumptimer=0;
+                jump=false;
+                gameStart();
+                
+            }
+
+
+   
+
+    </script>
+</body>
+</html>

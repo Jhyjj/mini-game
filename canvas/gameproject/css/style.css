@@ -1,0 +1,198 @@
+@font-face {
+    font-family: 'DOSMyungjo';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/DOSMyungjo.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+    @keyframes colorChange{
+        0%{
+            color:lime;
+            
+        }
+        50%{
+            color: white
+            
+        }
+        100%{
+            color: lime;
+            
+        }
+
+    }
+    body{
+        text-align: center;
+        font-family: 'DOSMyungjo';
+    }
+    
+    /* 시작화면 */
+    #start{
+        width: 100%;
+        height: 100vh;
+        background: black;
+        position: absolute;
+        z-index: 10;
+        color: white;
+       
+    }
+
+    #start>div{
+        width: 50%;
+        height: 50%;
+        position: absolute;
+        left: 50%; top: 50%;
+        transform: translate(-50%,-50%);
+        border: 1px solid lime;
+        padding-top: 50px;
+    }
+
+    #start h1{
+        font-size: 52px;
+        animation-name: colorChange;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+
+    }
+
+
+    .likebtn{
+        width: 100px;
+        margin: 0 auto;
+        margin-top: 40px;
+        height: 50px;
+        line-height: 50px;
+        font-size: 20px;
+        background: gray;
+        border: 2px solid black;
+        color: black;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+
+    /* 게임 선택창 */
+    #select{
+        margin-top: 30px;
+        /* display: flex; */
+        justify-content: space-evenly;
+        width: 100%;
+        height: 100px;
+        align-items: center;
+        display: none;
+    }
+
+    #select>div:hover{
+        color: lime;
+        cursor: pointer;
+    }
+
+    /* 게임 수리중 */
+    #nogame{
+        width: 80%;
+        background: gray;
+        height: 150px;
+        color: black;
+        font-size: 24px;
+        text-align: center;
+        padding-top: 35px;
+        border: 3px solid black;
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%,-50%);
+        display: none;
+    }
+
+    #nogame button{
+        width: 50px;
+        height: 30px;
+        border: 2px solid black;
+        background-color: gray;
+        font-family: 'DOSMyungjo';
+        font-size: 18px;
+        margin-top: 20px;
+    }
+
+
+    /* 게임 화면 */
+
+    #game{
+        position: absolute;
+        top: 0;
+        height: 100vh;
+        width: 100%;
+        text-align: center;
+        background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+        display: none;
+        /* transition: 3s; */
+    }
+
+
+    canvas{
+        background: url(/img/tree.png) center center/cover no-repeat;
+    }
+
+    #score{
+        line-height: 20px;
+        width: 150px;
+        height: 100px;
+        background-color: gray;
+        border: 3px solid black;
+        position: absolute;
+        left: 150px;
+        top: 100px;
+        padding-top: 10px;
+    }
+
+    #game>h1{
+        width: 400px;
+        margin: 0 auto;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        height: 60px;
+        line-height: 60px;
+        background: url(/img/woodh2.png) center center/100% no-repeat ;
+    }
+
+    /* 타이머 */
+    #timer{
+        width: 120px;
+        margin: 0 auto;
+        height: 15px;
+        background: gray;
+        border: 1px solid black;
+        
+    }
+
+    #timer div{
+        width: 120px;
+        height: 100%;
+        background-color: lime;
+    }
+
+    .rule{
+        border: 3px solid black;
+        color: black;
+        background-color: lightgoldenrodyellow;
+        width: 300px;
+        height: 200px; 
+    }
+
+    #result{
+        width: 400px;
+        border: 3px solid black;
+        background: gray;
+        padding: 20px 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        /* display: flex; */
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        display: none;
+    }
+
+    #result p{
+        width: 100%;
+        font-size: 20px;
+    }

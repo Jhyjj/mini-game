@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //prompt에 입력된 값이 4로 나눴을때 0으로 떨어지면 true
+        //4로 나눠서 0인 것들 중에 100으로 나눠떨어지면 다시 평년,
+        //그 중에 다시 400으로 나눴을때 0으로 나눠떨어지면 윤년이 나오게 만들어보시오
+        // let years=prompt('년도를 입력하세요');
+        //  if(years%4===0){
+        //      console.log('true');
+        //  }else{console.log('false')};
+        //  console.log(years);
+
+        // function check(){
+        //     if(years%4===0){
+        //         console.log(true);}
+        //         else{console.log(false)}
+        //     }
+
+        //윤년구하기 풀이
+        let year=Number(prompt('연도를 입력하세요'));
+        console.log(chYear(year));
+        function chYear(year){
+            if(year%4===0){
+                if(year%100===0){
+                    return year%400==0? true:false;
+                }
+            else{
+                return true;
+            }
+            }else{
+                return false;
+            }
+        }
+
+        
+
+
+
+
+
+    </script>
+</body>
+</html>
